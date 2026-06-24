@@ -1,9 +1,0 @@
-export function middlewareLogResponses(req, res, next) {
-    res.on("finish", () => {
-        let statusCode = res.statusCode;
-        if (statusCode !== 200) {
-            console.log(`[NON-OK] ${req.method} ${req.url} - Status: ${res.statusCode}`);
-        }
-        next();
-    });
-}
