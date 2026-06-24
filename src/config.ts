@@ -1,7 +1,19 @@
+process.loadEnvFile() 
+
 type APIConfig = {
-  fileserverHits: number;
+  fileServerHits: number;
+  dbURL: string;
 };
 
 export const config:APIConfig = {
-    fileserverHits: 0
+    fileServerHits: 0,
+    dbURL: envOrThrow("DB_URL"),
 };
+
+function envOrThrow(key: string) {
+    const value = process.env[key];
+    if (typeof value !== "string") {
+      throw new Error("env not loaded")
+    }
+    return value;
+}
