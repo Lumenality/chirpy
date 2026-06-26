@@ -5,12 +5,12 @@ import { handlerMetrics } from "./api/metrics.js";
 import { handlerReset } from "./api/reset.js";
 import { handlerValidate } from "./api/validate.js";
 // User handlers
-import { handlerCreateUser } from "./api/users.js";
+import { handlerCreateUser,handlerUpdateUser } from "./api/users.js";
 import { handlerLogin } from "./api/auth.js";
 import { handlerRefresh } from "./api/refresh.js";
 import { handlerRevoke } from "./api/revoke.js";
 // Chirp handlers
-import { handlerCreateChirp, handlerGetAllChirps, handlerGetChirp } from "./api/chirps.js";
+import { handlerCreateChirp, handlerGetAllChirps, handlerGetChirp, handlerDeleteChirp } from "./api/chirps.js";
 // Middleware
 import { middlewareLogResponses , middlewareMetricsInc, errorHandler } from "./api/middleware.js";
 // Config
@@ -49,10 +49,16 @@ app.get("/api/chirps/:chirpId", (req, res, next) => {
 app.post("/api/chirps", (req, res, next) => {
   Promise.resolve(handlerCreateChirp(req, res)).catch(next);
 });
+app.delete("/api/chirps/:chirpId", (req, res, next) => {
+  Promise.resolve(handlerDeleteChirp(req, res)).catch(next);
+});
 
   // api/users
 app.post("/api/users", (req, res, next) => {
   Promise.resolve(handlerCreateUser(req, res)).catch(next);
+});
+app.put("/api/users", (req, res, next) => {
+  Promise.resolve(handlerUpdateUser(req, res)).catch(next);
 });
 app.post("/api/login", (req, res, next) => {
   Promise.resolve(handlerLogin(req, res)).catch(next);
