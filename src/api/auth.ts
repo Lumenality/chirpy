@@ -2,13 +2,16 @@ import { Request, Response } from "express";
 
 import argon2 from "argon2";
 
+import { config } from "../config.js";
+
 import { getUserByEmail } from "../db/queries/users.js";
 import { NotFoundError, UnauthorizedError } from "./errors.js";
-import { config } from "../config.js";
+import { createRefreshToken } from "../db/queries/refreshTokens.js";
 
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
 import { isTable } from "drizzle-orm";
+import { randomBytes } from "node:crypto";
 
 type payload = Pick<JwtPayload, "iss" | "sub" | "iat" | "exp">;
 
@@ -30,20 +33,25 @@ export async function handlerLogin(req: Request, res: Response) {
     } catch {
         throw new UnauthorizedError("incorrect email or password")
     }
-
+    
     const isValidPassword = await checkPasswordHash(req.body.password, user.hashedPassword)
     if (!isValidPassword) {
         throw new UnauthorizedError("incorrect email or password")
     }
-    // Construct the JWT
-    const expiresInSeconds = req.body.expiresInSeconds && req.body.expiresInSeconds < 3600
-        ? req.body.expiresInSeconds
-        : 3600; // Set to an hour if not specified
-    const token = makeJWT(user.id,expiresInSeconds,config.api.jwtSecret)
+    const tokenExpiresIn = 60 * 60 //..seconds (1 hour)
+    const refreshTokenExpiresIn = 60 * 60 * 24 * 60;
+    const refreshToken = makeRefreshToken();
+        await createRefreshToken({
+        token: refreshToken,
+        userId: user.id,
+        expiresAt: new Date(Date.now() + refreshTokenExpiresIn * 1000),
+        revokedAt: null
+        });
+    const token = makeJWT(user.id,tokenExpiresIn,config.api.jwtSecret)
     // Remove the password from output
     const { hashedPassword: _, ...userResponse } = user;
     // Spread response and include token in the return object
-    return res.status(200).send({ ...userResponse, token });
+    return res.status(200).send({ ...userResponse, token, refreshToken });
 }
 
 export function makeJWT(userID: string, expiresIn: number, secret: string): string{
@@ -86,4 +94,8 @@ export function getBearerToken(req: Request): string {
         throw new UnauthorizedError("invalid token")
     }
     return cleanToken;
+}
+
+export function makeRefreshToken() {
+    return randomBytes(32).toString("hex");
 }
