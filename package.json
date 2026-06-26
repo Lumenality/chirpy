@@ -10,7 +10,7 @@
     "dev": "npx tsc && node dist/index.js",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest --run"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.0.0",
     "drizzle-kit": "^0.31.10",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^3.2.6"
   },
   "dependencies": {
     "argon2": "^0.44.0",
