@@ -1,1 +1,7 @@
-POST http://localhost:8080/admin/reset HTTP/1.1
+POST http://localhost:8080/api/chirps HTTP/1.1
+Content-Type: application/json
+
+{
+  "body": "Hello, world!",
+  "userId": "123e4567-e89b-12d3-a456-426614174000"
+}

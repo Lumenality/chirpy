@@ -8,13 +8,13 @@ export function middlewareLogResponses(req: Request, res: Response, next:NextFun
         if (statusCode < 200 || statusCode >= 300) {
             console.log(`[NON-OK] ${req.method} ${req.url} - Status: ${res.statusCode}`)
         }
-        
+  
     });
     next();
 }
 
 export function middlewareMetricsInc(req: Request, res: Response, next: NextFunction) {
-    config.fileServerHits++;
+    config.api.fileServerHits++;
     next();
 }
 
@@ -29,7 +29,9 @@ export function errorHandler(err: Error, req: Request,res: Response, next: NextF
   } else if (err instanceof NotFoundError) {
     return res.status(404).json({ error: err.message });
   } else {
-    console.log(err.message)
+    console.log("message:", err.message);
+    console.error("full error:", err);
+    console.error("cause:", err.cause);
     return res.status(500).json({ error: "Something went wrong on our end" });
   }
 }

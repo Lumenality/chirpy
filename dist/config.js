@@ -1,8 +1,5 @@
 process.loadEnvFile();
-export const config = {
-    fileServerHits: 0,
-    dbURL: envOrThrow("DB_URL"),
-};
+// Helper to throw error if there is the env file for some reason cannot be loaded
 function envOrThrow(key) {
     const value = process.env[key];
     if (typeof value !== "string") {
@@ -10,3 +7,16 @@ function envOrThrow(key) {
     }
     return value;
 }
+const migrationConfig = {
+    migrationsFolder: "./src/db/migrations",
+};
+export const config = {
+    api: {
+        fileServerHits: 0,
+        platform: envOrThrow("PLATFORM")
+    },
+    db: {
+        url: envOrThrow("DB_URL"),
+        migrationConfig: migrationConfig,
+    }
+};

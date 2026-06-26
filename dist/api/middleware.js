@@ -10,7 +10,7 @@ export function middlewareLogResponses(req, res, next) {
     next();
 }
 export function middlewareMetricsInc(req, res, next) {
-    config.fileServerHits++;
+    config.api.fileServerHits++;
     next();
 }
 export function errorHandler(err, req, res, next) {
@@ -27,7 +27,9 @@ export function errorHandler(err, req, res, next) {
         return res.status(404).json({ error: err.message });
     }
     else {
-        console.log(err.message);
+        console.log("message:", err.message);
+        console.error("full error:", err);
+        console.error("cause:", err.cause);
         return res.status(500).json({ error: "Something went wrong on our end" });
     }
 }

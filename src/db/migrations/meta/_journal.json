@@ -8,6 +8,20 @@
       "when": 1782311673449,
       "tag": "0000_clean_smasher",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782393459515,
+      "tag": "0001_careless_bushwacker",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782486563831,
+      "tag": "0002_plain_moon_knight",
+      "breakpoints": true
     }
   ]
 }
