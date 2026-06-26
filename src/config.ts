@@ -10,7 +10,8 @@ type Config = {
 
 type APIConfig = {
   fileServerHits: number;
-  platform:string;
+  platform: string;
+  jwtSecret: string;
 };
 
 type DBConfig = {
@@ -33,7 +34,8 @@ const migrationConfig: MigrationConfig = {
 export const config:Config = {
     api: {
       fileServerHits: 0,
-      platform: envOrThrow("PLATFORM")
+      platform: envOrThrow("PLATFORM"),
+      jwtSecret: envOrThrow("JWT_SECRET")
     },
     db:{
       url: envOrThrow("DB_URL"),

@@ -36,6 +36,8 @@ app.use(express.json());
 // api
 app.get("/api/healthz", handlerReadiness);
 app.get("/v1/health", handlerReadiness); // silencing the health checker when running the server
+
+  // api/chirps
 app.get("/api/chirps", (req, res, next) => {
   Promise.resolve(handlerGetAllChirps(req, res)).catch(next);
 });
@@ -45,6 +47,8 @@ app.get("/api/chirps/:chirpId", (req, res, next) => {
 app.post("/api/chirps", (req, res, next) => {
   Promise.resolve(handlerCreateChirp(req, res)).catch(next);
 });
+
+  // api/users
 app.post("/api/users", (req, res, next) => {
   Promise.resolve(handlerCreateUser(req, res)).catch(next);
 });
