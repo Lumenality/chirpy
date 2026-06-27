@@ -10,7 +10,7 @@ import { handlerLogin } from "./api/auth.js";
 import { handlerRefresh } from "./api/refresh.js";
 import { handlerRevoke } from "./api/revoke.js";
 // Chirp handlers
-import { handlerCreateChirp, handlerGetAllChirps, handlerGetChirp, handlerDeleteChirp } from "./api/chirps.js";
+import { handlerCreateChirp, handlerGetChirps, handlerGetChirp, handlerDeleteChirp } from "./api/chirps.js";
 // Middleware
 import { middlewareLogResponses , middlewareMetricsInc, errorHandler } from "./api/middleware.js";
 // Config
@@ -19,6 +19,7 @@ import { config } from "./config.js";
 import postgres from "postgres";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { drizzle } from "drizzle-orm/postgres-js";
+import { handlerUpgradeUserToRed } from "./api/polka/webhooks.js";
 
 
 // migrate on app start
@@ -41,7 +42,7 @@ app.get("/v1/health", handlerReadiness); // silencing the health checker when ru
 
   // api/chirps
 app.get("/api/chirps", (req, res, next) => {
-  Promise.resolve(handlerGetAllChirps(req, res)).catch(next);
+  Promise.resolve(handlerGetChirps(req, res)).catch(next);
 });
 app.get("/api/chirps/:chirpId", (req, res, next) => {
   Promise.resolve(handlerGetChirp(req, res)).catch(next);
@@ -68,6 +69,10 @@ app.post("/api/refresh", (req, res, next) => {
 });
 app.post("/api/revoke", (req, res, next) => {
   Promise.resolve(handlerRevoke(req, res)).catch(next);
+});
+  // api/polka
+app.post("/api/polka/webhooks", (req, res, next) => {
+  Promise.resolve(handlerUpgradeUserToRed(req, res)).catch(next);
 });
 
 // admin

@@ -29,6 +29,13 @@
       "when": 1782508184962,
       "tag": "0003_fixed_stryfe",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1782596171723,
+      "tag": "0004_groovy_thanos",
+      "breakpoints": true
     }
   ]
 }

@@ -16,6 +16,7 @@ export async function handlerCreateChirp(req: Request, res: Response){
   return res.status(201).send( newChirp );
 
 }
+
 export async function handlerGetChirp(req: Request, res: Response) {
   const { chirpId } = req.params;
   if (typeof chirpId !== "string") {
@@ -28,8 +29,20 @@ export async function handlerGetChirp(req: Request, res: Response) {
   return res.status(200).send( chirp );
 }
 
-export async function handlerGetAllChirps(req: Request, res: Response) {
-  const chirps = await getAllChirps();
+export async function handlerGetChirps(req: Request, res: Response) {
+  
+  let authorId = undefined;
+  let authorIdQuery = req.query.authorId;
+  if (typeof authorIdQuery === "string") {
+    authorId = authorIdQuery;
+  }
+  let sortOrder = undefined;
+  let sortOrderQuery = req.query.sort;
+  if (typeof sortOrderQuery === "string") {
+    sortOrder = sortOrderQuery;
+  }
+  const chirps = await getAllChirps(authorId,sortOrder);
+
   return res.status(200).send( chirps );
 }
 
@@ -55,4 +68,3 @@ export async function handlerDeleteChirp(req: Request, res: Response) {
   return res.status(204).send();
 }
 
-  

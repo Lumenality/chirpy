@@ -99,3 +99,16 @@ export function getBearerToken(req: Request): string {
 export function makeRefreshToken() {
     return randomBytes(32).toString("hex");
 }
+
+export function getAPIKey(req: Request) {
+    const auth = req.header('Authorization');
+    
+    if (!auth) {
+        throw new UnauthorizedError("invalid key")
+    }
+    const parts = auth.split(" ");
+    if (parts.length !== 2 || parts[0] !== "ApiKey" || !parts[1]) {
+        throw new UnauthorizedError("invalid key")
+    }
+    return parts[1];
+}
